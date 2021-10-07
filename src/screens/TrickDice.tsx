@@ -97,7 +97,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   diceColumn: {
-    flex: 1,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
