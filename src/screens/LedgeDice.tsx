@@ -1,34 +1,107 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import React from "react";
-import {
-  Button,
-  StyleSheet,
-  Image,
-  Text
-} from "react-native";
+import React, { useState } from "react";
+import { Button, StyleSheet, Image, Text } from "react-native";
 import { View } from "react-native";
 import { ParamList } from "../ParamList";
+const tailslide = require("../../assets/dice/tailslide.png");
+const noseslide = require("../../assets/dice/noseslide.png");
+const bluntslide = require("../../assets/dice/bluntslide.png");
+const nosebluntslide = require("../../assets/dice/nosebluntslide.png");
+const fiveogrind = require("../../assets/dice/5-0grind.png");
+const nosegrind = require("../../assets/dice/nosegrind.png");
+const crookedgrind = require("../../assets/dice/crookedgrind.png");
+const overcrook = require("../../assets/dice/overcrook.png");
+const suski = require("../../assets/dice/suski.png");
+const salad = require("../../assets/dice/salad.png");
+const smith = require("../../assets/dice/smith.png");
+const feeble = require("../../assets/dice/feeble.png");
+const blank = require("../../assets/dice/blankGrind.png");
+const fiftyfifty = require("../../assets/dice/fiftyfifty.png");
+
+const regular = require("../../assets/dice/regular.png");
+const switchStance = require("../../assets/dice/switch.png");
+const fakie = require("../../assets/dice/fakie.png");
+const nollie = require("../../assets/dice/nollie.png");
+
+const backside = require("../../assets/dice/backside.png");
+const frontside = require("../../assets/dice/frontside.png");
+
+const skate = require("../../assets/dice/skate.png");
+const heart = require("../../assets/dice/heart.png");
 
 export interface LedgeDiceProps {
-  navigation: StackNavigationProp<ParamList, "LedgeDice">;
+  navigation: StackNavigationProp<ParamList, "TrickDice">;
 }
 
 export const LedgeDice: React.FC<LedgeDiceProps> = ({ navigation }) => {
-  
+  const [direction, setDirection] = useState<any>(skate);
+  const [stance, setStance] = useState<any>(skate);
+  const [grind, setGrind] = useState<any>(blank);
+
+  const grinds: any = [
+    tailslide,
+    noseslide,
+    bluntslide,
+    nosebluntslide,
+    nosegrind,
+    fiveogrind,
+    crookedgrind,
+    overcrook,
+    salad,
+    suski,
+    feeble,
+    fiftyfifty,
+    smith,
+  ];
+
+  const stances: any[] = [switchStance, regular, fakie, nollie, skate, heart];
+
+  const directions: any[] = [backside, frontside, skate, heart, skate, heart];
+
+  const roll = (): void => {
+    setDirection(directions[randomValue(6)]);
+    setStance(stances[randomValue(6)]);
+    setGrind(grinds[randomValue(13)]);
+  };
+  const randomValue = (numberOfSides: number): number => {
+    return Math.floor(Math.random() * numberOfSides + 0);
+  };
+
   return (
-    <View>
-        <Text>Hello world</Text>
+    <View style={{ backgroundColor: "grey" }}>
+      <View style={styles.diceColumn}>
+        <View style={styles.diceRow}>
+          <Image style={styles.dice} source={stance} />
+          <Image style={styles.dice} source={direction} />
+        </View>
+        <View style={styles.diceRow}>
+          <Image style={styles.dice} source={grind} />
+        </View>
+      </View>
+      <Button
+        title="Roll"
+        onPress={() => {
+          roll();
+        }}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
-    marginBottom: 30,
+  dice: {
     width: 150,
+    height: 150,
+    margin: 10,
+  },
+  diceRow: {
+    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "darkcyan",
-    margin: 3,
-    borderRadius: 5,
+  },
+  diceColumn: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

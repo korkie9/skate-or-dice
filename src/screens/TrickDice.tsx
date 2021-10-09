@@ -1,6 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import React, { useState } from "react";
-import { Button, StyleSheet, Image, Text } from "react-native";
+import React, { useRef, useState } from "react";
+import { Button, StyleSheet, Image, Text, Animated } from "react-native";
 import { View } from "react-native";
 import { ParamList } from "../ParamList";
 const skate = require("../../assets/dice/skate.png");
@@ -27,32 +27,46 @@ export const TrickDice: React.FC<TrickDiceProps> = ({ navigation }) => {
   const [stance, setStance] = useState<any>(skate);
   const [rotation, setRotation] = useState<any>(skate);
   const [flip, setFlip] = useState<any>(skate);
+  const animate = useRef<any>(new Animated.Value(100)).current;
+  const spinValue = new Animated.Value(0);
+  Animated.timing(
+    spinValue,
+  {
+    toValue: 1,
+    duration: 1000,
+    useNativeDriver: true  // To make use of native driver for performance
+  }
+).start()
+const spin = spinValue.interpolate({
+  inputRange: [0, 1],
+  outputRange: ['0deg', '360deg']
+})
+  const directionArr: any[] = [
+    skate,
+    heart,
+    backside,
+    frontside,
+    skate,
+    heart,
+  ];
+  const stanceArr: any[] = [
+    regular,
+    fakie,
+    nollie,
+    switchStance,
+    skate,
+    heart,
+  ];
+  const rotationArr: any[] = [
+    oneeighty,
+    threesixty,
+    shuvit,
+    bigspin,
+    skate,
+    heart,
+  ];
+  const flipArr: any[] = [kickflip, heelflip, skate, heart, skate, heart];
   const roll = (): void => {
-    const directionArr: any[] = [
-      skate,
-      heart,
-      backside,
-      frontside,
-      skate,
-      heart,
-    ];
-    const stanceArr: any[] = [
-      regular,
-      fakie,
-      nollie,
-      switchStance,
-      skate,
-      heart,
-    ];
-    const rotationArr: any[] = [
-      oneeighty,
-      threesixty,
-      shuvit,
-      bigspin,
-      skate,
-      heart,
-    ];
-    const flipArr: any[] = [kickflip, heelflip, skate, heart, skate, heart];
     setDirection(randomValue(directionArr));
     setStance(randomValue(stanceArr));
     setRotation(randomValue(rotationArr));
@@ -63,11 +77,23 @@ export const TrickDice: React.FC<TrickDiceProps> = ({ navigation }) => {
     return array[index];
   };
 
+
+
+
   return (
-    <View>
+    <View style={{backgroundColor: "grey"}}>
       <View style={styles.diceColumn}>
         <View style={styles.diceRow}>
-          <Image style={styles.dice} source={stance} />
+        <Animated.View
+        style={[
+          styles.dice,
+          {
+            transform: [{rotate: spin}],
+          },
+        ]}>
+        <Image style={styles.dice} source={stance} />
+      </Animated.View>
+          
           <Image style={styles.dice} source={direction} />
         </View>
         <View style={styles.diceRow}>
@@ -89,7 +115,7 @@ const styles = StyleSheet.create({
   dice: {
     width: 150,
     height: 150,
-    margin: 10
+    margin: 10,
   },
   diceRow: {
     flexDirection: "row",
