@@ -7,7 +7,7 @@ interface RouteProps {}
 const Routes: React.FC<RouteProps> = ({}) => {
   return (
     <NavigationContainer>
-      <Tabs/>
+      <Tabs />
     </NavigationContainer>
     
   );

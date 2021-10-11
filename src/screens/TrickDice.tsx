@@ -1,7 +1,9 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import React, { useRef, useState } from "react";
+import { DeviceMotion } from "expo-sensors";
+import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { Button, StyleSheet, Image, Text, Animated } from "react-native";
 import { View } from "react-native";
+import { Di } from "../components/Di";
 import { ParamList } from "../ParamList";
 const skate = require("../../assets/dice/skate.png");
 const heart = require("../../assets/dice/heart.png");
@@ -27,36 +29,9 @@ export const TrickDice: React.FC<TrickDiceProps> = ({ navigation }) => {
   const [stance, setStance] = useState<any>(skate);
   const [rotation, setRotation] = useState<any>(skate);
   const [flip, setFlip] = useState<any>(skate);
-  const animate = useRef<any>(new Animated.Value(100)).current;
-  const spinValue = new Animated.Value(0);
-  Animated.timing(
-    spinValue,
-  {
-    toValue: 1,
-    duration: 1000,
-    useNativeDriver: true  // To make use of native driver for performance
-  }
-).start()
-const spin = spinValue.interpolate({
-  inputRange: [0, 1],
-  outputRange: ['0deg', '360deg']
-})
-  const directionArr: any[] = [
-    skate,
-    heart,
-    backside,
-    frontside,
-    skate,
-    heart,
-  ];
-  const stanceArr: any[] = [
-    regular,
-    fakie,
-    nollie,
-    switchStance,
-    skate,
-    heart,
-  ];
+
+  const directionArr: any[] = [skate, heart, backside, frontside, skate, heart];
+  const stanceArr: any[] = [regular, fakie, nollie, switchStance, skate, heart];
   const rotationArr: any[] = [
     oneeighty,
     threesixty,
@@ -66,6 +41,27 @@ const spin = spinValue.interpolate({
     heart,
   ];
   const flipArr: any[] = [kickflip, heelflip, skate, heart, skate, heart];
+  useEffect(() => {
+    _motionSubscribe();
+    return () => {
+      _motionUnsubscribe();
+    };
+  }, []);
+
+  const _motionSubscribe = () => {
+    DeviceMotion.addListener((devicemotionData) => {
+      const motion = devicemotionData.acceleration;
+      if (motion?.x && motion?.y && motion?.z) {
+        if (motion.x > 1 && motion.y > 1 && motion.z > 1) {
+          roll();
+        }
+      }
+    });
+  };
+
+  const _motionUnsubscribe = () => {
+    DeviceMotion.removeAllListeners();
+  };
   const roll = (): void => {
     setDirection(randomValue(directionArr));
     setStance(randomValue(stanceArr));
@@ -76,37 +72,25 @@ const spin = spinValue.interpolate({
     const index: number = Math.floor(Math.random() * 5 + 0);
     return array[index];
   };
-
-
-
-
   return (
-    <View style={{backgroundColor: "grey"}}>
+    <View
+      style={{
+        backgroundColor: "darkcyan",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100%",
+      }}
+    >
       <View style={styles.diceColumn}>
         <View style={styles.diceRow}>
-        <Animated.View
-        style={[
-          styles.dice,
-          {
-            transform: [{rotate: spin}],
-          },
-        ]}>
-        <Image style={styles.dice} source={stance} />
-      </Animated.View>
-          
-          <Image style={styles.dice} source={direction} />
+          <Di image={stance} />
+          <Di image={direction} />
         </View>
         <View style={styles.diceRow}>
-          <Image style={styles.dice} source={rotation} />
-          <Image style={styles.dice} source={flip} />
+          <Di image={rotation} />
+          <Di image={flip} />
         </View>
       </View>
-      <Button
-        title="Roll"
-        onPress={() => {
-          roll();
-        }}
-      />
     </View>
   );
 };

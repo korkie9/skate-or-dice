@@ -1,8 +1,11 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, StyleSheet, Image, Text } from "react-native";
 import { View } from "react-native";
+import { Di } from "../components/Di";
 import { ParamList } from "../ParamList";
+import { DeviceMotion } from "expo-sensors";
+
 const tailslide = require("../../assets/dice/tailslide.png");
 const noseslide = require("../../assets/dice/noseslide.png");
 const bluntslide = require("../../assets/dice/bluntslide.png");
@@ -53,37 +56,59 @@ export const LedgeDice: React.FC<LedgeDiceProps> = ({ navigation }) => {
     fiftyfifty,
     smith,
   ];
-
   const stances: any[] = [switchStance, regular, fakie, nollie, skate, heart];
-
   const directions: any[] = [backside, frontside, skate, heart, skate, heart];
+
+  useEffect(() => {
+    _motionSubscribe();
+    return () => {
+      _motionUnsubscribe();
+    };
+  }, []);
+
+  const _motionSubscribe = () => {
+    DeviceMotion.addListener((devicemotionData) => {
+      const motion = devicemotionData.acceleration;
+      if (motion?.x && motion?.y && motion?.z) {
+        if (motion.x > 1 && motion.y > 1 && motion.z > 1) {
+          roll();
+        }
+      }
+    });
+  };
+
+  const _motionUnsubscribe = () => {
+    DeviceMotion.removeAllListeners();
+  };
 
   const roll = (): void => {
     setDirection(directions[randomValue(6)]);
     setStance(stances[randomValue(6)]);
     setGrind(grinds[randomValue(13)]);
   };
+
   const randomValue = (numberOfSides: number): number => {
     return Math.floor(Math.random() * numberOfSides + 0);
   };
 
   return (
-    <View style={{ backgroundColor: "grey" }}>
+    <View
+      style={{
+        backgroundColor: "darkcyan",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100%",
+      }}
+    >
       <View style={styles.diceColumn}>
         <View style={styles.diceRow}>
-          <Image style={styles.dice} source={stance} />
-          <Image style={styles.dice} source={direction} />
+          <Di image={stance} />
+          <Di image={direction} />
         </View>
         <View style={styles.diceRow}>
-          <Image style={styles.dice} source={grind} />
+          <Di image={grind} />
         </View>
       </View>
-      <Button
-        title="Roll"
-        onPress={() => {
-          roll();
-        }}
-      />
     </View>
   );
 };
