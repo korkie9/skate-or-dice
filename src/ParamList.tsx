@@ -1,4 +1,6 @@
 export type ParamList = {
     TrickDice: undefined,
-    LedgeDice: undefined,
+    GrindsAndSlidesDice: undefined,
+    ManuelDice: undefined
+    Rules: undefined
 }

@@ -29,6 +29,7 @@ export const TrickDice: React.FC<TrickDiceProps> = ({ navigation }) => {
   const [stance, setStance] = useState<any>(skate);
   const [rotation, setRotation] = useState<any>(skate);
   const [flip, setFlip] = useState<any>(skate);
+  const [hasRolled, setHasRolled] = useState<boolean>(false);
 
   const directionArr: any[] = [skate, heart, backside, frontside, skate, heart];
   const stanceArr: any[] = [regular, fakie, nollie, switchStance, skate, heart];
@@ -52,7 +53,7 @@ export const TrickDice: React.FC<TrickDiceProps> = ({ navigation }) => {
     DeviceMotion.addListener((devicemotionData) => {
       const motion = devicemotionData.acceleration;
       if (motion?.x && motion?.y && motion?.z) {
-        if (motion.x > 1 && motion.y > 1 && motion.z > 1) {
+        if (motion.x > 10 || motion.y > 10 || motion.z > 10) {
           roll();
         }
       }
@@ -67,6 +68,7 @@ export const TrickDice: React.FC<TrickDiceProps> = ({ navigation }) => {
     setStance(randomValue(stanceArr));
     setRotation(randomValue(rotationArr));
     setFlip(randomValue(flipArr));
+    setHasRolled(true);
   };
   const randomValue = (array: string[]): string => {
     const index: number = Math.floor(Math.random() * 5 + 0);
@@ -86,6 +88,23 @@ export const TrickDice: React.FC<TrickDiceProps> = ({ navigation }) => {
           <Di image={stance} />
           <Di image={direction} />
         </View>
+        {hasRolled ? (
+          <View />
+        ) : (
+          <Text
+            style={{
+              textAlign: "center",
+              width: 200,
+              height: 50,
+              fontSize: 25,
+              fontWeight: "bold",
+              color: "darkred",
+              margin: 10
+            }}
+          >
+            SHAKE TO ROLL
+          </Text>
+        )}
         <View style={styles.diceRow}>
           <Di image={rotation} />
           <Di image={flip} />

@@ -2,10 +2,13 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { TrickDice } from "./screens/TrickDice";
-import { LedgeDice } from "./screens/LedgeDice";
+import { GrindsAndSlidesDice } from "./screens/GrindsAndSlidesDice";
+import { ManuelDice } from "./screens/ManualDice";
 import { ParamList } from "./ParamList";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { View } from "react-native";
+import { Rules } from "./screens/Rules"
+import { Entypo } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator<ParamList>();
 
@@ -23,7 +26,35 @@ export const Tabs = () => {
         component={TrickDice}
         options={{
           headerShown: false,
-          tabBarLabel: "Tricks",
+          tabBarLabel: "Flatground",
+          tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="skateboard"
+                size={size}
+                color={color}
+              />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="GrindsAndSlidesDice"
+        component={GrindsAndSlidesDice}
+        options={{
+          headerShown: false,
+          tabBarLabel: "Grinds/Slides",
+          tabBarIcon: ({ color, size }) => (
+            <View style={{ transform: [{ rotate: "180deg" }] }}>
+              <MaterialIcons name="space-bar" size={size} color={color} />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="ManuelDice"
+        component={ManuelDice}
+        options={{
+          headerShown: false,
+          tabBarLabel: "Manuel",
           tabBarIcon: ({ color, size }) => (
             <View style={{ transform: [{ rotate: "30deg" }] }}>
               <MaterialCommunityIcons
@@ -36,14 +67,14 @@ export const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="LedgeDice"
-        component={LedgeDice}
+        name="Rules"
+        component={Rules}
         options={{
           headerShown: false,
-          tabBarLabel: "Ledges",
+          tabBarLabel: "Rules",
           tabBarIcon: ({ color, size }) => (
             <View style={{ transform: [{ rotate: "180deg" }] }}>
-              <MaterialIcons name="space-bar" size={size} color={color} />
+              <Entypo name="menu" size={size} color={color} />
             </View>
           ),
         }}

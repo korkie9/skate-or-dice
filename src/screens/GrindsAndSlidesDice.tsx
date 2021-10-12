@@ -20,6 +20,7 @@ const smith = require("../../assets/dice/smith.png");
 const feeble = require("../../assets/dice/feeble.png");
 const blank = require("../../assets/dice/blankGrind.png");
 const fiftyfifty = require("../../assets/dice/fiftyfifty.png");
+const boardslide = require('../../assets/dice/boardslide.png')
 
 const regular = require("../../assets/dice/regular.png");
 const switchStance = require("../../assets/dice/switch.png");
@@ -32,14 +33,17 @@ const frontside = require("../../assets/dice/frontside.png");
 const skate = require("../../assets/dice/skate.png");
 const heart = require("../../assets/dice/heart.png");
 
-export interface LedgeDiceProps {
-  navigation: StackNavigationProp<ParamList, "TrickDice">;
+
+
+export interface GrindsAndSlidesDiceProps {
+  navigation: StackNavigationProp<ParamList, "GrindsAndSlidesDice">;
 }
 
-export const LedgeDice: React.FC<LedgeDiceProps> = ({ navigation }) => {
+export const GrindsAndSlidesDice: React.FC<GrindsAndSlidesDiceProps> = ({ navigation }) => {
   const [direction, setDirection] = useState<any>(skate);
   const [stance, setStance] = useState<any>(skate);
   const [grind, setGrind] = useState<any>(blank);
+  const [hasRolled, setHasRolled] = useState<any>(false);
 
   const grinds: any = [
     tailslide,
@@ -55,6 +59,7 @@ export const LedgeDice: React.FC<LedgeDiceProps> = ({ navigation }) => {
     feeble,
     fiftyfifty,
     smith,
+    boardslide
   ];
   const stances: any[] = [switchStance, regular, fakie, nollie, skate, heart];
   const directions: any[] = [backside, frontside, skate, heart, skate, heart];
@@ -70,7 +75,7 @@ export const LedgeDice: React.FC<LedgeDiceProps> = ({ navigation }) => {
     DeviceMotion.addListener((devicemotionData) => {
       const motion = devicemotionData.acceleration;
       if (motion?.x && motion?.y && motion?.z) {
-        if (motion.x > 1 && motion.y > 1 && motion.z > 1) {
+        if (motion.x > 10 || motion.y > 10 || motion.z > 10) {
           roll();
         }
       }
@@ -84,7 +89,8 @@ export const LedgeDice: React.FC<LedgeDiceProps> = ({ navigation }) => {
   const roll = (): void => {
     setDirection(directions[randomValue(6)]);
     setStance(stances[randomValue(6)]);
-    setGrind(grinds[randomValue(13)]);
+    setGrind(grinds[randomValue(14)]);
+    setHasRolled(true)
   };
 
   const randomValue = (numberOfSides: number): number => {
@@ -105,6 +111,23 @@ export const LedgeDice: React.FC<LedgeDiceProps> = ({ navigation }) => {
           <Di image={stance} />
           <Di image={direction} />
         </View>
+        {hasRolled ? (
+          <View />
+        ) : (
+          <Text
+            style={{
+              textAlign: "center",
+              width: 200,
+              height: 50,
+              fontSize: 25,
+              fontWeight: "bold",
+              color: "darkred",
+              margin: 10
+            }}
+          >
+            SHAKE TO ROLL
+          </Text>
+        )}
         <View style={styles.diceRow}>
           <Di image={grind} />
         </View>
