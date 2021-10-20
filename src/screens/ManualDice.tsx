@@ -1,6 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useState, useEffect } from "react";
-import { Button, StyleSheet, Image, Text } from "react-native";
+import { Button, StyleSheet, Image, Text, TouchableWithoutFeedback } from "react-native";
 import { View } from "react-native";
 import { Di } from "../components/Di";
 import { ParamList } from "../ParamList";
@@ -65,6 +65,7 @@ export const ManuelDice: React.FC<ManuelDiceProps> = ({ navigation }) => {
   };
 
   return (
+    <TouchableWithoutFeedback onPress={() => roll()}>
     <View
       style={{
         backgroundColor: "darkcyan",
@@ -92,14 +93,16 @@ export const ManuelDice: React.FC<ManuelDiceProps> = ({ navigation }) => {
               margin: 10
             }}
           >
-            SHAKE TO ROLL
+            SHAKE/TOUCH
           </Text>
         )}
         <View style={styles.diceRow}>
           <Di image={variation} />
         </View>
       </View>
+      
     </View>
+    </TouchableWithoutFeedback>
   );
 };
 

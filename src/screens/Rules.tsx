@@ -182,12 +182,12 @@ export const Rules: React.FC<RulesProps> = ({ navigation }) => {
         <Text style={styles.paragraph}>
           5. Players must agree beforehand if or not frontside overcrook exists.
           Should players agree that it doesn't and frontside overcrook is
-          thrown, a nosegrind may be done inside.
+          thrown, a nosegrind may be done instead.
         </Text>
         <Text style={styles.paragraph}>
           5. Players must agree beforehand if or not frontside Suski exists.
           Should players agree that it doesn't and frontside Suski or is thrown,
-          a frontside 5-0 may be done inside.
+          a frontside 5-0 may be done instead.
         </Text>
       </View>
     );

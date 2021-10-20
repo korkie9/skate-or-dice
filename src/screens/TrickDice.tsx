@@ -1,7 +1,14 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import { DeviceMotion } from "expo-sensors";
 import React, { ReactElement, useEffect, useRef, useState } from "react";
-import { Button, StyleSheet, Image, Text, Animated } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Image,
+  Text,
+  Animated,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { View } from "react-native";
 import { Di } from "../components/Di";
 import { ParamList } from "../ParamList";
@@ -75,42 +82,44 @@ export const TrickDice: React.FC<TrickDiceProps> = ({ navigation }) => {
     return array[index];
   };
   return (
-    <View
-      style={{
-        backgroundColor: "darkcyan",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100%",
-      }}
-    >
-      <View style={styles.diceColumn}>
-        <View style={styles.diceRow}>
-          <Di image={stance} />
-          <Di image={direction} />
-        </View>
-        {hasRolled ? (
-          <View />
-        ) : (
-          <Text
-            style={{
-              textAlign: "center",
-              width: 200,
-              height: 50,
-              fontSize: 25,
-              fontWeight: "bold",
-              color: "darkred",
-              margin: 10
-            }}
-          >
-            SHAKE TO ROLL
-          </Text>
-        )}
-        <View style={styles.diceRow}>
-          <Di image={rotation} />
-          <Di image={flip} />
+    <TouchableWithoutFeedback onPress={() => roll()}>
+      <View
+        style={{
+          backgroundColor: "darkcyan",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <View style={styles.diceColumn}>
+          <View style={styles.diceRow}>
+            <Di image={stance} />
+            <Di image={direction} />
+          </View>
+          {hasRolled ? (
+            <View />
+          ) : (
+            <Text
+              style={{
+                textAlign: "center",
+                width: 200,
+                height: 50,
+                fontSize: 25,
+                fontWeight: "bold",
+                color: "darkred",
+                margin: 10,
+              }}
+            >
+              SHAKE/TOUCH
+            </Text>
+          )}
+          <View style={styles.diceRow}>
+            <Di image={rotation} />
+            <Di image={flip} />
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

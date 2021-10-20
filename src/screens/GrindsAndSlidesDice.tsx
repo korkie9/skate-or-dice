@@ -1,6 +1,12 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useState, useEffect } from "react";
-import { Button, StyleSheet, Image, Text } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Image,
+  Text,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { View } from "react-native";
 import { Di } from "../components/Di";
 import { ParamList } from "../ParamList";
@@ -20,7 +26,7 @@ const smith = require("../../assets/dice/smith.png");
 const feeble = require("../../assets/dice/feeble.png");
 const blank = require("../../assets/dice/blankGrind.png");
 const fiftyfifty = require("../../assets/dice/fiftyfifty.png");
-const boardslide = require('../../assets/dice/boardslide.png')
+const boardslide = require("../../assets/dice/boardslide.png");
 
 const regular = require("../../assets/dice/regular.png");
 const switchStance = require("../../assets/dice/switch.png");
@@ -33,13 +39,13 @@ const frontside = require("../../assets/dice/frontside.png");
 const skate = require("../../assets/dice/skate.png");
 const heart = require("../../assets/dice/heart.png");
 
-
-
 export interface GrindsAndSlidesDiceProps {
   navigation: StackNavigationProp<ParamList, "GrindsAndSlidesDice">;
 }
 
-export const GrindsAndSlidesDice: React.FC<GrindsAndSlidesDiceProps> = ({ navigation }) => {
+export const GrindsAndSlidesDice: React.FC<GrindsAndSlidesDiceProps> = ({
+  navigation,
+}) => {
   const [direction, setDirection] = useState<any>(skate);
   const [stance, setStance] = useState<any>(skate);
   const [grind, setGrind] = useState<any>(blank);
@@ -59,7 +65,7 @@ export const GrindsAndSlidesDice: React.FC<GrindsAndSlidesDiceProps> = ({ naviga
     feeble,
     fiftyfifty,
     smith,
-    boardslide
+    boardslide,
   ];
   const stances: any[] = [switchStance, regular, fakie, nollie, skate, heart];
   const directions: any[] = [backside, frontside, skate, heart, skate, heart];
@@ -90,7 +96,7 @@ export const GrindsAndSlidesDice: React.FC<GrindsAndSlidesDiceProps> = ({ naviga
     setDirection(directions[randomValue(6)]);
     setStance(stances[randomValue(6)]);
     setGrind(grinds[randomValue(14)]);
-    setHasRolled(true)
+    setHasRolled(true);
   };
 
   const randomValue = (numberOfSides: number): number => {
@@ -98,41 +104,43 @@ export const GrindsAndSlidesDice: React.FC<GrindsAndSlidesDiceProps> = ({ naviga
   };
 
   return (
-    <View
-      style={{
-        backgroundColor: "darkcyan",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100%",
-      }}
-    >
-      <View style={styles.diceColumn}>
-        <View style={styles.diceRow}>
-          <Di image={stance} />
-          <Di image={direction} />
-        </View>
-        {hasRolled ? (
-          <View />
-        ) : (
-          <Text
-            style={{
-              textAlign: "center",
-              width: 200,
-              height: 50,
-              fontSize: 25,
-              fontWeight: "bold",
-              color: "darkred",
-              margin: 10
-            }}
-          >
-            SHAKE TO ROLL
-          </Text>
-        )}
-        <View style={styles.diceRow}>
-          <Di image={grind} />
+    <TouchableWithoutFeedback onPress={() => roll()}>
+      <View
+        style={{
+          backgroundColor: "darkcyan",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <View style={styles.diceColumn}>
+          <View style={styles.diceRow}>
+            <Di image={stance} />
+            <Di image={direction} />
+          </View>
+          {hasRolled ? (
+            <View />
+          ) : (
+            <Text
+              style={{
+                textAlign: "center",
+                width: 300,
+                height: 50,
+                fontSize: 25,
+                fontWeight: "bold",
+                color: "darkred",
+                margin: 10,
+              }}
+            >
+              SHAKE/TOUCH
+            </Text>
+          )}
+          <View style={styles.diceRow}>
+            <Di image={grind} />
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

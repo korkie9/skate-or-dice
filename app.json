@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Skate-Or-Dice",
+    "name": "Skate Or Dice",
     "slug": "Skate-Or-Dice",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -23,7 +23,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/dice/logo.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.korkie.SkateOrDice"
     },
     "web": {
       "favicon": "./assets/dice/logo.png"
